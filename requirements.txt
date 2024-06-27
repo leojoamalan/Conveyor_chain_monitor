@@ -4,3 +4,5 @@ numpy
 playsound
 tensorflow
 TIME-python
+pydub
+requests
