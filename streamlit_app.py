@@ -2,11 +2,17 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from playsound import playsound
+from pydub import AudioSegment
+from pydub.playback import play
+import requests
+import io
 import time
 
 def play_alert_sound():
-    playsound('alert.mp3')
+    url = 'https://www.soundjay.com/button/beep-07.wav'
+    response = requests.get(url)
+    sound = AudioSegment.from_file(io.BytesIO(response.content), format="wav")
+    play(sound)
 
 def get_sensor_data():
     return {
