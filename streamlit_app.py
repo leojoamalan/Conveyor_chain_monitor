@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 from playsound import playsound
+import time
 
 def play_alert_sound():
     playsound('alert.mp3')
@@ -35,7 +36,7 @@ LIMITS = {
 def check_limits(data):
     alerts = []
     for key, value in data.items():
-        if value > LIMITS[key]:
+        if key != 'time' and value > LIMITS.get(key, float('inf')):
             alerts.append(f"{key} exceeds limit: {value:.2f} > {LIMITS[key]}")
     return alerts
 
