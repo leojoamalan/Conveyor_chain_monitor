@@ -6,3 +6,4 @@ tensorflow
 TIME-python
 pydub
 requests
+ffprobe
