@@ -49,7 +49,7 @@ alert_placeholder = st.empty()
 for _ in range(100):
     sensor_data = get_sensor_data()
     sensor_data['time'] = pd.Timestamp.now()
-    st.session_state.data = st.session_state.data.append(sensor_data, ignore_index=True)
+    st.session_state.data = pd.concat([st.session_state.data, pd.DataFrame(sensor_data, index=[0])], ignore_index=True)
     
     st.subheader('Current Sensor Data')
     st.write(pd.DataFrame(sensor_data, index=[0]))
