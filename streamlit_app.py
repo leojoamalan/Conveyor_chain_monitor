@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import time
+from datetime import datetime
 from playsound import playsound
 
 def play_alert_sound():
@@ -48,7 +48,7 @@ alert_placeholder = st.empty()
 
 for _ in range(100):
     sensor_data = get_sensor_data()
-    sensor_data['time'] = pd.Timestamp.now()
+    sensor_data['time'] = datetime.now()
     
     new_data = pd.DataFrame(sensor_data, index=[0])
     st.session_state.data = pd.concat([st.session_state.data, new_data], ignore_index=True)
