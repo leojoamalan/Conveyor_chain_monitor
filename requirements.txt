@@ -3,4 +3,4 @@ pandas
 numpy
 playsound
 tensorflow
-time
+TIME-python
