@@ -1,119 +1,68 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
+import time
+from playsound import playsound
 
+def play_alert_sound():
+    playsound('alert.mp3')
 
-st.title("📊 Data evaluation app")
+def get_sensor_data():
+    return {
+        'Strain (μstrain)': np.random.normal(100, 10),
+        'Load (kg)': np.random.normal(200, 20),
+        'Chain Position (mm)': np.random.normal(10, 1),
+        'Vibration (g)': np.random.normal(5, 0.5),
+        'Temperature (°C)': np.random.normal(30, 2),
+        'Chain Wear (%)': np.random.normal(3, 0.3),
+        'Torque (Nm)': np.random.normal(50, 5),
+        'Lubrication Level (%)': np.random.normal(70, 7),
+        'Patch Length (mm)': np.random.normal(15, 1.5)
+    }
 
-st.write(
-    "We are so glad to see you here. ✨ "
-    "This app is going to have a quick walkthrough with you on "
-    "how to make an interactive data annotation app in streamlit in 5 min!"
-)
-
-st.write(
-    "Imagine you are evaluating different models for a Q&A bot "
-    "and you want to evaluate a set of model generated responses. "
-    "You have collected some user data. "
-    "Here is a sample question and response set."
-)
-
-data = {
-    "Questions": [
-        "Who invented the internet?",
-        "What causes the Northern Lights?",
-        "Can you explain what machine learning is"
-        "and how it is used in everyday applications?",
-        "How do penguins fly?",
-    ],
-    "Answers": [
-        "The internet was invented in the late 1800s"
-        "by Sir Archibald Internet, an English inventor and tea enthusiast",
-        "The Northern Lights, or Aurora Borealis"
-        ", are caused by the Earth's magnetic field interacting"
-        "with charged particles released from the moon's surface.",
-        "Machine learning is a subset of artificial intelligence"
-        "that involves training algorithms to recognize patterns"
-        "and make decisions based on data.",
-        " Penguins are unique among birds because they can fly underwater. "
-        "Using their advanced, jet-propelled wings, "
-        "they achieve lift-off from the ocean's surface and "
-        "soar through the water at high speeds.",
-    ],
+LIMITS = {
+    'Strain (μstrain)': 150,
+    'Load (kg)': 250,
+    'Chain Position (mm)': 12,
+    'Vibration (g)': 7,
+    'Temperature (°C)': 40,
+    'Chain Wear (%)': 5,
+    'Torque (Nm)': 60,
+    'Lubrication Level (%)': 50,
+    'Patch Length (mm)': 20
 }
 
-df = pd.DataFrame(data)
+def check_limits(data):
+    alerts = []
+    for key, value in data.items():
+        if value > LIMITS[key]:
+            alerts.append(f"{key} exceeds limit: {value:.2f} > {LIMITS[key]}")
+    return alerts
 
-st.write(df)
+if 'data' not in st.session_state:
+    st.session_state.data = pd.DataFrame(columns=['time'] + list(LIMITS.keys()))
 
-st.write(
-    "Now I want to evaluate the responses from my model. "
-    "One way to achieve this is to use the very powerful `st.data_editor` feature. "
-    "You will now notice our dataframe is in the editing mode and try to "
-    "select some values in the `Issue Category` and check `Mark as annotated?` once finished 👇"
-)
+st.title('Conveyor Chain Monitoring System')
 
-df["Issue"] = [True, True, True, False]
-df["Category"] = ["Accuracy", "Accuracy", "Completeness", ""]
+alert_placeholder = st.empty()
 
-new_df = st.data_editor(
-    df,
-    column_config={
-        "Questions": st.column_config.TextColumn(width="medium", disabled=True),
-        "Answers": st.column_config.TextColumn(width="medium", disabled=True),
-        "Issue": st.column_config.CheckboxColumn("Mark as annotated?", default=False),
-        "Category": st.column_config.SelectboxColumn(
-            "Issue Category",
-            help="select the category",
-            options=["Accuracy", "Relevance", "Coherence", "Bias", "Completeness"],
-            required=False,
-        ),
-    },
-)
+for _ in range(100):
+    sensor_data = get_sensor_data()
+    sensor_data['time'] = pd.Timestamp.now()
+    st.session_state.data = st.session_state.data.append(sensor_data, ignore_index=True)
+    
+    st.subheader('Current Sensor Data')
+    st.write(pd.DataFrame(sensor_data, index=[0]))
 
-st.write(
-    "You will notice that we changed our dataframe and added new data. "
-    "Now it is time to visualize what we have annotated!"
-)
-
-st.divider()
-
-st.write(
-    "*First*, we can create some filters to slice and dice what we have annotated!"
-)
-
-col1, col2 = st.columns([1, 1])
-with col1:
-    issue_filter = st.selectbox("Issues or Non-issues", options=new_df.Issue.unique())
-with col2:
-    category_filter = st.selectbox(
-        "Choose a category",
-        options=new_df[new_df["Issue"] == issue_filter].Category.unique(),
-    )
-
-st.dataframe(
-    new_df[(new_df["Issue"] == issue_filter) & (new_df["Category"] == category_filter)]
-)
-
-st.markdown("")
-st.write(
-    "*Next*, we can visualize our data quickly using `st.metrics` and `st.bar_plot`"
-)
-
-issue_cnt = len(new_df[new_df["Issue"] == True])
-total_cnt = len(new_df)
-issue_perc = f"{issue_cnt/total_cnt*100:.0f}%"
-
-col1, col2 = st.columns([1, 1])
-with col1:
-    st.metric("Number of responses", issue_cnt)
-with col2:
-    st.metric("Annotation Progress", issue_perc)
-
-df_plot = new_df[new_df["Category"] != ""].Category.value_counts().reset_index()
-
-st.bar_chart(df_plot, x="Category", y="count")
-
-st.write(
-    "Here we are at the end of getting started with streamlit! Happy Streamlit-ing! :balloon:"
-)
-
+    alerts = check_limits(sensor_data)
+    if alerts:
+        alert_message = '\n'.join(alerts)
+        alert_placeholder.error(alert_message)
+        play_alert_sound()
+    else:
+        alert_placeholder.empty()
+    
+    st.subheader('Sensor Data Trends')
+    st.line_chart(st.session_state.data.set_index('time'))
+    
+    time.sleep(5)
