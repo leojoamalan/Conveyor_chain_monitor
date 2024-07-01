@@ -7,4 +7,4 @@ TIME-python
 pydub
 requests
 ffprobe
-plotly.graph_objs
+plotly
