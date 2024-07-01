@@ -30,15 +30,15 @@ st.title("Machine Monitoring Dashboard")
 # Layout for stats cards
 cols = st.columns(4)
 stats = [
-    {"id": "strain", "title": "Strain (μstrain)", "icon": "strain.png"},
-    {"id": "load", "title": "Load (kg)", "icon": "load-icon.png"},
-    {"id": "chain_position", "title": "Chain Position (mm)", "icon": "chain-icon.png"},
-    {"id": "vibration", "title": "Vibration (g)", "icon": "vibration-icon.png"},
-    {"id": "temperature", "title": "Temperature (°C)", "icon": "tem.png"},
-    {"id": "chain_wear", "title": "Chain Wear (%)", "icon": "chain-wear-icon.png"},
-    {"id": "torque", "title": "Torque (Nm)", "icon": "torque-icon.png"},
-    {"id": "lubrication_level", "title": "Lubrication Level (%)", "icon": "lubrication-icon.png"},
-    {"id": "patch_length", "title": "Patch Length (mm)", "icon": "patch-icon.png"}
+    {"id": "strain", "title": "Strain (μstrain)"},
+    {"id": "load", "title": "Load (kg)"},
+    {"id": "chain_position", "title": "Chain Position (mm)"},
+    {"id": "vibration", "title": "Vibration (g)"},
+    {"id": "temperature", "title": "Temperature (°C)"},
+    {"id": "chain_wear", "title": "Chain Wear (%)"},
+    {"id": "torque", "title": "Torque (Nm)"},
+    {"id": "lubrication_level", "title": "Lubrication Level (%)"},
+    {"id": "patch_length", "title": "Patch Length (mm)"}
 ]
 
 # Function to display a stat card
