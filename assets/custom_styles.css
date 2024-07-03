@@ -1,0 +1,76 @@
+/* styles.css */
+
+/* Body and general layout */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard-title {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.container-fluid {
+    margin: 20px;
+}
+
+.row {
+    margin-bottom: 20px;
+}
+
+/* Stats cards */
+.stats-card {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    height: 150px; /* Adjust height as needed */
+}
+
+.card-title {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.card-value {
+    font-size: 28px;
+}
+
+.card-percentage {
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+.card-condition {
+    font-size: 14px;
+    font-style: italic;
+    color: #888;
+}
+
+/* Graphs */
+.col-md-6 {
+    padding: 10px;
+    height: 350px; /* Adjust height as needed */
+}
+
+/* Download button */
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.button-container button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-container button:hover {
+    background-color: #0056b3;
+}
