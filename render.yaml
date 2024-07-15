@@ -1,0 +1,14 @@
+# Exported from Render on 2024-07-15T10:00:52Z
+services:
+- type: web
+  name: Conveyor_chain_monitor
+  runtime: python
+  repo: https://github.com/leojoamalan/Conveyor_chain_monitor
+  plan: free
+  envVars:
+  - key: conveyor_monitor
+    sync: false
+  region: oregon
+  buildCommand: pip install -r requirements.txt
+  startCommand: streamlit_app.py
+version: "1"
